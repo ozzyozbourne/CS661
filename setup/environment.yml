@@ -1,0 +1,16 @@
+
+name: myenv
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.5
+  - pip
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - scipy
+  - scikit-learn
+  - statsmodels
+  - jupyter
+  - jupyterlab
