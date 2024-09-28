@@ -1,5 +1,5 @@
 def cal_tax():
-    "This functional calculate the federal, state tax"
+    """This functional calculate the federal, state tax"""
     fed_tax = float(input("Enter the federal tax please: "))
     state_tax = float(input("Enter the state tax please: "))
     salary = float(input("Enter your salary please: "))
