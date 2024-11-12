@@ -1,15 +1,16 @@
 class EDA:
 
-    def __init__(self, pd, np, plt, sns, games, plays, players, player_play):
+    def __init__(self, pd, np, plt, sns):
         self.pd = pd
         self.np = np
         self.plt = plt
         self.sns = sns
-        self.games = pd.read_csv(games)
-        self.plays = pd.read_csv(plays)
-        self.players = pd.read_csv(players)
-        self.player_play = pd.read_csv(player_play)
+        self.games = pd.read_csv('dataset/games.csv')
+        self.plays = pd.read_csv('dataset/plays.csv')
+        self.players = pd.read_csv('dataset/players.csv')
+        self.player_play = pd.read_csv('dataset/player_play.csv')
 
+    # data description part begins 
 
     def descTableGame(self):
         print("Description of table game\n")
@@ -78,3 +79,9 @@ class EDA:
         summary = self.plays.describe(include='all')
         print("\nDataset summary:")
         print(summary)
+
+    # data description part ends    
+
+    # data preprocessing part begins 
+
+    # data preprocessing part ends
