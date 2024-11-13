@@ -120,7 +120,6 @@ class EDA:
 
     #on tables games 
 
-    #Univariate Analysis
     def numberOfGamesPerWeekAndPlot(self):
          
         games_per_week = self.games.groupby('week')['gameId'].count()
