@@ -54,6 +54,7 @@ class EDA:
         print("\nDataset summary:")
         print(summary)
 
+    # Step 5
     def plottingOutliers(self, csv_name):
         data = getDf(csv_name)
         numeric_cols = data.select_dtypes(include=[self.np.number]).columns.tolist()
@@ -72,6 +73,7 @@ class EDA:
             self.plt.tight_layout()
             self.plt.show()
 
+    # Step 6
     def featureRelationships(self, csv_name):
         data = getDf(csv_name)
         # Detect numeric columns
@@ -85,6 +87,7 @@ class EDA:
         self.plt.suptitle(f"Feature Relationships in {csv_name}", y=1.02)
         self.plt.show()
 
+    # Step 7
     def correlationAnalysis(self, csv_name):
         data = getDf(csv_name)
         # Select numeric columns for correlation analysis
@@ -103,6 +106,7 @@ class EDA:
         self.plt.tight_layout()
         self.plt.show()
 
+    # Step 8
     def scatterPlots(self, csv_name, x_column, y_column):
         data = getDf(csv_name)
         # Check if columns exist in the dataframe
@@ -118,6 +122,7 @@ class EDA:
         self.plt.tight_layout()
         self.plt.show()
 
+    # Step 9
     def mergeDataFrames(self, left_csv, right_csv, on_column, how='inner'):
         left_data, right_data = getDf(left_csv), getDf(right_csv)
         # Check if the joining column exists in both dataframes
@@ -129,6 +134,7 @@ class EDA:
         print(f"DataFrames {left_csv} and {right_csv} merged on '{on_column}' using {how} join.")
         return merged_data
 
+    # Step 10
     def sliceData(self, csv_name, filter_column, filter_value):
         data = getDf(csv_name)
         # Check if the filter column exists in the dataframe
