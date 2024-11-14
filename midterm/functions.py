@@ -12,6 +12,12 @@ class EDA:
 
     # data description part begins 
 
+    def describecolums(self):
+        print(f'\n{self.games.info()}\n')
+        print(f'\n{self.plays.info()}\n')
+        print(f'\n{self.players.info()}\n')
+        print(f'\n{self.player_play.info()}\n')
+        
     def descTableGame(self):
         print("Description of table game\n")
 
@@ -116,6 +122,15 @@ class EDA:
         print("\ndropped Succesfully")
     # data preprocessing part ends
 
+    def getDf(self, dfName):
+        match dfName:
+            case 'games': return self.games
+            case 'plays': return self.plays
+            case 'players': return self.players
+            case 'player_play': return self.player_play
+            case _: raise ValueError(f"Invalid data type: {data_type}")
+
+
     #Eda begins here
 
     #on tables games 
@@ -189,3 +204,43 @@ class EDA:
             outliers = self.games[(self.games[score_type] < lower_bound) | (self.games[score_type] > upper_bound)]
             print(f"\nOutliers in {score_type}:")
             print(outliers[['gameId', score_type]])
+
+    def plottingOutliers(self, csv_name):
+
+        data = getDf(csv_name)
+        
+        numeric_cols = data.select_dtypes(include=[self.np.number]).columns.tolist()
+
+        # Plotting for each numeric column
+        for col in numeric_cols:
+            self.plt.figure(figsize=(10, 5))
+            self.plt.suptitle(f"Outlier Detection for '{col}' in {csv_name}")
+
+            # Box plot
+            self.plt.subplot(1, 2, 1)
+            self.sns.boxplot(data[col])
+            self.plt.title(f"Box Plot of {col}")
+
+            # Histogram
+            self.plt.subplot(1, 2, 2)
+            self.sns.histplot(data[col], bins=30, kde=True)
+            self.plt.title(f"Histogram of {col}")
+            
+            self.plt.tight_layout()
+            self.plt.show()
+
+    def featureRelationships(self, csv_name):
+        data = getDf(csv_name)
+        
+        # Detect numeric columns
+        numeric_cols = data.select_dtypes(include=[np.number]).columns.tolist()
+        
+        if len(numeric_cols) < 2:
+            print(f"Not enough numeric columns in {csv_name} for pair plotting.")
+            return
+
+        # Pair plot
+        print(f"Creating pair plot for {csv_name}...")
+        self.sns.pairplot(data[numeric_cols], diag_kind='kde')
+        self.plt.suptitle(f"Feature Relationships in {csv_name}", y=1.02)
+        self.plt.show()
