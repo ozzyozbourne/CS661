@@ -1,14 +1,26 @@
+import sys
+
+
 class EDA:
+    # Error handling
+    def loadCsvFile(self, filepath):
+        try:
+            df = self.pd.read_csv(filepath)
+            print(f"Successfully loaded {filepath}")
+            return df
+        except FileNotFoundError:
+            print(f"Error: The file '{filepath}' was not found. Please check the path.")
+            sys.exit(1)
 
     def __init__(self, pd, np, plt, sns):
         self.pd = pd
         self.np = np
         self.plt = plt
         self.sns = sns
-        self.games = pd.read_csv('dataset/games.csv')
-        self.plays = pd.read_csv('dataset/plays.csv')
-        self.players = pd.read_csv('dataset/players.csv')
-        self.player_play = pd.read_csv('dataset/player_play.csv')
+        self.games = self.loadCsvFile('dataset/games.csv')
+        self.plays = self.loadCsvFile('dataset/plays.csv')
+        self.players = self.loadCsvFile('dataset/players.csv')
+        self.player_play = self.loadCsvFile('dataset/player_play.csv')
 
     def getDf(self, dfName):
         match dfName:
@@ -81,6 +93,7 @@ class EDA:
         if len(numeric_cols) < 2:
             print(f"Not enough numeric columns in {csv_name} for pair plotting.")
             return
+        numeric_cols = numeric_cols[:10]  # Limit to the first 20 numeric columns
         # Pair plot
         print(f"Creating pair plot for {csv_name}...")
         self.sns.pairplot(data[numeric_cols], diag_kind='kde')
@@ -95,6 +108,7 @@ class EDA:
         if numeric_cols.empty:
             print(f"No numeric columns available for correlation analysis in {csv_name}.")
             return
+        numeric_cols = numeric_cols.iloc[:, :10]  # Limit to the first 20 numeric columns
         # Compute correlation matrix
         correlation_matrix = numeric_cols.corr()
         # Plot the heatmap
