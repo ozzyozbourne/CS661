@@ -28,7 +28,7 @@ class EDA:
         print("Droping null values cols using the dropna function")
         for name in ['games', 'plays', 'players', 'player_play']:
             print(f'\nIn {name} table\n')
-            df = getDf(name)
+            df = self.getDf(name)
             if df.isnull().any().any():
                 print("Droping cols -> \n")
                 for col in df.columns[df.isnull().any()].tolist():
@@ -40,7 +40,7 @@ class EDA:
 
     def descTable(self, name):
         print(f'Description of table {name}\n')
-        df = getDf(name)
+        df = self.getDf(name)
         # Get the number of rows and columns
         num_rows, num_cols = df.shape
         print(f"Number of rows: {num_rows}")
@@ -56,7 +56,7 @@ class EDA:
 
     # Step 5
     def plottingOutliers(self, csv_name):
-        data = getDf(csv_name)
+        data = self.getDf(csv_name)
         numeric_cols = data.select_dtypes(include=[self.np.number]).columns.tolist()
         # Plotting for each numeric column
         for col in numeric_cols:
@@ -75,7 +75,7 @@ class EDA:
 
     # Step 6
     def featureRelationships(self, csv_name):
-        data = getDf(csv_name)
+        data = self.getDf(csv_name)
         # Detect numeric columns
         numeric_cols = data.select_dtypes(include=[self.np.number]).columns.tolist()
         if len(numeric_cols) < 2:
@@ -89,7 +89,7 @@ class EDA:
 
     # Step 7
     def correlationAnalysis(self, csv_name):
-        data = getDf(csv_name)
+        data = self.getDf(csv_name)
         # Select numeric columns for correlation analysis
         numeric_cols = data.select_dtypes(include=[self.np.number])
         if numeric_cols.empty:
@@ -108,7 +108,7 @@ class EDA:
 
     # Step 8
     def scatterPlots(self, csv_name, x_column, y_column):
-        data = getDf(csv_name)
+        data = self.getDf(csv_name)
         # Check if columns exist in the dataframe
         if x_column not in data.columns or y_column not in data.columns:
             print(f"One or both columns '{x_column}' and '{y_column}' not found in {csv_name}.")
@@ -124,7 +124,7 @@ class EDA:
 
     # Step 9
     def mergeDataFrames(self, left_csv, right_csv, on_column, how='inner'):
-        left_data, right_data = getDf(left_csv), getDf(right_csv)
+        left_data, right_data = self.getDf(left_csv), self.getDf(right_csv)
         # Check if the joining column exists in both dataframes
         if on_column not in left_data.columns or on_column not in right_data.columns:
             print(f"Joining column '{on_column}' not found in one or both datasets.")
@@ -136,7 +136,7 @@ class EDA:
 
     # Step 10
     def sliceData(self, csv_name, filter_column, filter_value):
-        data = getDf(csv_name)
+        data = self.getDf(csv_name)
         # Check if the filter column exists in the dataframe
         if filter_column not in data.columns:
             print(f"Column '{filter_column}' not found in {csv_name}.")
