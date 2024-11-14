@@ -36,7 +36,7 @@ class EDA:
                 df.dropna(axis=1, inplace=True)
                 print("\ndropped Succesfully")
             else:
-                print("No nullable columns found.")
+                print(f'\nNo nullable columns found  in table {name}\n')
 
     def descTable(self, name):
         print(f'Description of table {name}\n')
