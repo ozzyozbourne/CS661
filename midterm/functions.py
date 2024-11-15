@@ -228,3 +228,56 @@ class EDA:
 
         print("Filtered Data:")
         print(filtered_data)
+
+    #Eda begin here
+    def mergeTheDataSets(self):
+        # Merge player_play with plays to get play details
+        self.player_play_merged = self.player_play.merge(self.plays, on=['gameId', 'playId'])
+        # Merge with players to get player details
+        self.player_play_merged = self.player_play_merged.merge(self.players, on='nflId')
+        # Merge with games to get game outcomes
+        self.combined_data = self.player_play_merged.merge(self.games, on='gameId')
+
+    def keyMetricsAndFeatures(self):
+        # Calculate total rushing yards and passing yards per player
+        aggregate_metrics = self.combined_data.groupby('nflId').agg(
+            total_rushing_yards=self.pd.NamedAgg(column='rushingYards', aggfunc='sum'),
+            total_passing_yards=self.pd.NamedAgg(column='passingYards', aggfunc='sum'),
+            total_plays=self.pd.NamedAgg(column='playId', aggfunc='count')
+        ).reset_index()
+
+        # Count the number of plays for each game without conflicting names
+        play_counts = self.combined_data.groupby('gameId')['playId'].count().reset_index(name='play_count')
+
+        # Merge play counts back into the combined_data (avoid naming conflicts)
+        self.combined_data = self.combined_data.merge(play_counts, on='gameId', how='left', suffixes=('', '_y'))
+
+        # Calculate average yards gained per play, handle division by zero
+        self.combined_data['average_yards_gained'] = self.combined_data['yardsGained'] / self.combined_data['play_count']
+
+        # Replace infinity values with 0
+        self.combined_data['average_yards_gained'].replace([float('inf'), -float('inf')], 0, inplace=True)
+
+        # Create additional features: total scores per game
+        total_scores = self.combined_data.groupby('gameId').agg(
+            home_final_score=self.pd.NamedAgg(column='homeFinalScore', aggfunc='first'),
+            visitor_final_score=self.pd.NamedAgg(column='visitorFinalScore', aggfunc='first')
+        ).reset_index()
+
+        # Rename the score columns to avoid conflicts
+        total_scores.rename(columns={
+            'home_final_score': 'home_final_score_new',
+            'visitor_final_score': 'visitor_final_score_new'
+        }, inplace=True)
+
+        # Merge total scores back into the combined data
+        self.combined_data = combined_data.merge(total_scores, on='gameId', how='left')
+
+        # Display the final aggregated metrics and the combined dataset
+        print(aggregate_metrics.head())
+
+    def printDetails(self):
+        print(self.combined_data[['gameId', 'nflId', 'average_yards_gained', 'home_final_score_new', 'visitor_final_score_new']].head())
+        print(data.info())
+        print(data.describe())
+
