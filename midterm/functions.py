@@ -160,3 +160,71 @@ class EDA:
         print(f"Data sliced from {csv_name} where {filter_column} = {filter_value}.")
         return filtered_data
 
+    # 11. Matrix Representation
+    def matrixRepresentation(self, data):
+        data = self.getDf(data)
+        if isinstance(data, self.pd.DataFrame):
+            matrix = data.values
+            print("Matrix Representation:")
+            print(matrix)
+            return matrix
+        else:
+            print("Input must be a pandas DataFrame.")
+            return None
+
+    # 12. NumPy Integration
+    def toNumpyArray(self, data):
+        data = self.getDf(data)
+        if isinstance(data, self.pd.DataFrame):
+            numpy_array = data.to_numpy()
+            print("Converted to NumPy Array:")
+            print(numpy_array)
+            return numpy_array
+        else:
+            print("Input must be a pandas DataFrame.")
+            return None
+
+    # 13. Data Selection
+    def selectData(self, data, rows=None, cols=None):
+        data = self.getDf(data)
+        if isinstance(data, self.pd.DataFrame):
+            # Select specific rows and columns
+            selected_data = data.iloc[rows, cols] if rows is not None or cols is not None else data
+            print("Selected Data Slice:")
+            print(selected_data)
+            return selected_data
+        else:
+            print("Input must be a pandas DataFrame.")
+            return None
+
+    # 16
+    def filterData(self, data, conditions):
+        data = self.getDf(data)
+        if not isinstance(data, self.pd.DataFrame):
+            print("Input must be a pandas DataFrame.")
+            return None
+
+        filtered_data = data.copy()
+        for column, (operator, value) in conditions.items():
+            if column not in filtered_data.columns:
+                print(f"Column '{column}' not found in the DataFrame.")
+                continue
+
+            # Apply filtering based on the operator
+            if operator == '>':
+                filtered_data = filtered_data[filtered_data[column] > value]
+            elif operator == '<':
+                filtered_data = filtered_data[filtered_data[column] < value]
+            elif operator == '>=':
+                filtered_data = filtered_data[filtered_data[column] >= value]
+            elif operator == '<=':
+                filtered_data = filtered_data[filtered_data[column] <= value]
+            elif operator == '==':
+                filtered_data = filtered_data[filtered_data[column] == value]
+            elif operator == '!=':
+                filtered_data = filtered_data[filtered_data[column] != value]
+            else:
+                print(f"Unsupported operator '{operator}' for column '{column}'. Skipping...")
+
+        print("Filtered Data:")
+        print(filtered_data)
