@@ -271,13 +271,54 @@ class EDA:
         }, inplace=True)
 
         # Merge total scores back into the combined data
-        self.combined_data = combined_data.merge(total_scores, on='gameId', how='left')
+        self.combined_data = self.combined_data.merge(total_scores, on='gameId', how='left')
 
         # Display the final aggregated metrics and the combined dataset
         print(aggregate_metrics.head())
+        print(self.combined_data[['gameId', 'nflId', 'average_yards_gained', 'home_final_score_new', 'visitor_final_score_new']].head())
 
     def printDetails(self):
-        print(self.combined_data[['gameId', 'nflId', 'average_yards_gained', 'home_final_score_new', 'visitor_final_score_new']].head())
-        print(data.info())
-        print(data.describe())
+        print(self.combined_data.head())
+        print(self.combined_data.describe())
 
+    def plotDistributionOfRushingYards(self):
+        self.plt.figure(figsize=(10, 6))
+        self.sns.histplot(self.combined_data['rushingYards'], bins=30, kde=True)
+        self.plt.title('Distribution of Rushing Yards')
+        self.plt.xlabel('Rushing Yards')
+        self.plt.ylabel('Frequency')
+        self.plt.show()
+
+    def plotPassingYardByQuarterBack(self):
+        self.plt.figure(figsize=(12, 6))
+        self.sns.boxplot(x='displayName', y='passingYards', data=self.combined_data)
+        self.plt.title('Passing Yards by Quarterback')
+        self.plt.xticks(rotation=45)
+        self.plt.ylabel('Passing Yards')
+        self.plt.xlabel('Quarterback')
+        self.plt.show()
+
+    def plotRelationShipBetweenRushingYardAndPassingYards(self):
+        self.plt.figure(figsize=(10, 6))
+        self.sns.scatterplot(x='rushingYards', y='passingYards', data=self.combined_data)
+        self.plt.title('Relationship Between Rushing and Passing Yards')
+        self.plt.xlabel('Rushing Yards')
+        self.plt.ylabel('Passing Yards')
+        self.plt.show()
+
+    def plotTeamPerformanceOverTime(self):
+        # Convert gameDate to datetime
+        self.combined_data['gameDate'] = self.pd.to_datetime(self.combined_data['gameDate'])
+
+        # Group by date and calculate average rushing and passing yards
+        performance_over_time = self.combined_data.groupby('gameDate')[['rushingYards', 'passingYards']].mean().reset_index()
+
+        self.plt.figure(figsize=(14, 7))
+        self.plt.plot(performance_over_time['gameDate'], performance_over_time['rushingYards'], label='Average Rushing Yards', marker='o')
+        self.plt.plot(performance_over_time['gameDate'], performance_over_time['passingYards'], label='Average Passing Yards', marker='x')
+        self.plt.title('Team Performance Over Time')
+        self.plt.xlabel('Date')
+        self.plt.ylabel('Average Yards')
+        self.plt.legend()
+        self.plt.grid()
+        self.plt.show()
