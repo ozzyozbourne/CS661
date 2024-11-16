@@ -289,9 +289,14 @@ class EDA:
         self.plt.ylabel('Frequency')
         self.plt.show()
 
-    def plotPassingYardByQuarterBack(self):
+    def plotTop10QBPassingYards(self):
+        top_10_qbs = self.combined_data.groupby('displayName')['passingYards'].mean().nlargest(10).index
+
+        # Filter the original dataframe to include only top 10 QBs
+        filtered_data = self.combined_data[self.combined_data['displayName'].isin(top_10_qbs)]
+        
         self.plt.figure(figsize=(12, 6))
-        self.sns.boxplot(x='displayName', y='passingYards', data=self.combined_data)
+        self.sns.boxplot(x='displayName', y='passingYards', data=filtered_data)
         self.plt.title('Passing Yards by Quarterback')
         self.plt.xticks(rotation=45)
         self.plt.ylabel('Passing Yards')
