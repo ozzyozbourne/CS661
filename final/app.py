@@ -29,14 +29,29 @@ rf.fit(X_train, y_train)
 # Streamlit app layout
 st.title("Diabetes Risk Prediction App")
 
-# User input
-bmi = st.slider("BMI", 20.0, 40.0, 25.0)
-glucose = st.slider("Glucose Level", 70, 200, 100)
-age = st.slider("Age", 18, 100, 30)
-blood_pressure = st.slider("Blood Pressure", 80, 180, 120)
+# User input for all features
+pregnancies = st.slider("Number of Pregnancies", 0, 17, 3)
+glucose = st.slider("Glucose Level (mg/dL)", 0, 200, 120)
+blood_pressure = st.slider("Blood Pressure (mm Hg)", 0, 122, 70)
+skin_thickness = st.slider("Skin Thickness (mm)", 0, 100, 20)
+insulin = st.slider("Insulin Level (mu U/ml)", 0, 846, 79)
+bmi = st.slider("BMI", 0.0, 67.1, 31.4)
+diabetes_pedigree = st.slider("Diabetes Pedigree Function", 0.078, 2.42, 0.3725)
+age = st.slider("Age (years)", 21, 81, 33)
 
 # Prepare input for prediction
-user_input = np.array([[bmi, glucose, age, blood_pressure]])
+user_input = np.array([[
+    pregnancies,
+    glucose,
+    blood_pressure,
+    skin_thickness,
+    insulin,
+    bmi,
+    diabetes_pedigree,
+    age
+]])
+
+# Scale the input
 user_input_scaled = scaler.transform(user_input)
 
 # Predictions
