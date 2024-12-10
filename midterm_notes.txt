@@ -1,0 +1,39 @@
+1) First merge data-set player_play and ploy using 'game_id' and 'playid'
+
+2) Then we merges the new data frame players on nflid
+
+3) then we mergeg gaian woth games on gameid
+
+
+so to summary first we start with the dataset 
+result = player_play merge it with play using 'game_id' and 'playid'
+result = merged with player using 'nflId'
+finally merge it with the games using the gamesid 
+
+
+In the function key metric and features 
+first we create a player level summary statistics 
+that gives us 
+1) total rushing yards per player 
+2) total passign yards per player
+3) total number of plays per player 
+4) group all player by player id to see the overall performance
+
+table used combined data with group by on 
+nflID and with rushingYards col with sum func
+passingYards col with sum func 
+playid count 
+
+
+play counts ie how many plays ocurred in a games 
+
+then we add that back to the combined data 
+
+then we calculated average yards gained 
+
+
+then we calculated the total scored achiaved by the home team and he way team 
+
+
+
+
